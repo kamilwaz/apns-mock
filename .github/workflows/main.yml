@@ -1,0 +1,53 @@
+---
+name: main
+on:
+  push:
+    branches: [main]
+
+jobs:
+  ci:
+    name: Run checks and tests
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        elixir-version: [1.13.4]
+        otp-version: [24.3]
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Set up Elixir
+      uses: erlef/setup-beam@v1
+      with:
+        elixir-version: ${{matrix.elixir-version}}
+        otp-version: ${{matrix.otp-version}}
+
+    - name: Restore dependencies
+      uses: actions/cache@v3
+      with:
+        path: |
+          _build
+          deps
+          priv/plts
+        key: ${{runner.os}}-${{matrix.elixir-version}}-${{matrix.otp-version}}-${{hashFiles('**/mix.lock')}}
+        restore-keys: |
+          ${{runner.os}}-${{matrix.elixir-version}}-${{matrix.otp-version}}-${{hashFiles('**/mix.lock')}}
+          ${{runner.os}}-${{matrix.elixir-version}}-${{matrix.otp-version}}
+
+    - name: Install dependencies
+      run: mix do deps.get, deps.compile
+
+    - name: Check formatting
+      run: mix format --check-formatted
+
+    - name: Check compile errors
+      run: mix compile
+
+    - name: Check Dialyzer
+      run: mix dialyzer
+
+    - name: Run tests
+      run: mix test
+      env:
+        MIX_ENV: test
