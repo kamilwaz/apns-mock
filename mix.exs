@@ -8,6 +8,7 @@ defmodule APNSMock.MixProject do
       elixir: "~> 1.12",
       elixirc_paths: elixirc_paths(Mix.env()),
       elixirc_options: elixirc_options(),
+      dialyzer: dialyzer(),
       compilers: Mix.compilers(),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
@@ -33,6 +34,12 @@ defmodule APNSMock.MixProject do
     [warnings_as_errors: true]
   end
 
+  defp dialyzer do
+    [
+      plt_file: {:no_warn, "priv/plts/dialyzer.plt"}
+    ]
+  end
+
   # Specifies your project dependencies.
   #
   # Type `mix help deps` for examples and options.
@@ -42,7 +49,8 @@ defmodule APNSMock.MixProject do
       {:telemetry_metrics, "~> 0.6"},
       {:telemetry_poller, "~> 1.0"},
       {:jason, "~> 1.2"},
-      {:plug_cowboy, "~> 2.5"}
+      {:plug_cowboy, "~> 2.5"},
+      {:dialyxir, "~> 1.2", only: [:dev], runtime: false}
     ]
   end
 

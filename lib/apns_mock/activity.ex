@@ -1,11 +1,14 @@
 defmodule APNSMock.Activity do
   use Agent
 
+  alias Plug.Conn
+
   @type t :: %{
           device_token: binary,
-          request_headers: Conn.headers(),
+          request_headers: %{optional(binary) => binary},
           request_data: Conn.params(),
-          status: Conn.int_status()
+          status: Conn.int_status(),
+          response_data: map | nil
         }
 
   @spec start_link(term) :: Agent.on_start()

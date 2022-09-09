@@ -1,6 +1,8 @@
 defmodule APNSMock.Mock do
   use Agent
 
+  alias Plug.Conn
+
   @type result :: %{
           status: Conn.int_status(),
           reason: binary

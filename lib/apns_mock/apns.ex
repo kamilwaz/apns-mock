@@ -1,8 +1,9 @@
 defmodule APNSMock.APNS do
   alias APNSMock.Activity
   alias APNSMock.Mock
+  alias Plug.Conn
 
-  @spec send(Conn.headers(), Conn.params()) :: {Conn.int_status(), binary}
+  @spec send(Conn.headers(), Conn.params()) :: {Conn.int_status(), map | nil}
   def send(headers, params) do
     {device_token, params} = Map.pop!(params, "device_token")
 

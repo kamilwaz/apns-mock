@@ -7,7 +7,7 @@ A simple mock of Apple Push Notification service (APNs) for testing purposes.
 To start the server, run the following command:
 
 ```bash
-docker run --port 2197:2197 kamilwaz/apns-mock-server
+docker run --publish 2197:2197 kamilwaz/apns-mock-server
 ```
 
 ## API
